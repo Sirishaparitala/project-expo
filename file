@@ -1,0 +1,45 @@
+import { Directory } from './Directory';
+import ExpoFileSystem from './ExpoFileSystem';
+import { type PickMultipleFilesOptions, type PickMultipleFilesResult, type PickSingleFileOptions, type PickSingleFileResult } from './File.types';
+import { type WatchEvent, type WatchOptions, type WatchSubscription } from './FileSystemWatcher.types';
+import { DownloadTask, UploadTask } from './NetworkTasks';
+import { type DownloadOptions, type DownloadTaskOptions, type UploadOptions, type UploadResult } from './NetworkTasks.types';
+/**
+ * Represents a file on the filesystem.
+ *
+ * A `File` instance can be created for any path, and does not need to exist on the filesystem during creation.
+ *
+ * The constructor accepts an array of strings that are joined to create the file URI. The first argument can also be a `Directory` instance (like `Paths.cache`) or a `File` instance (which creates a new reference to the same file).
+ * @example
+ * ```ts
+ * const file = new File(Paths.cache, "subdirName", "file.txt");
+ * ```
+ */
+export declare class File extends ExpoFileSystem.FileSystemFile implements Blob {
+    /**
+     * A static method that downloads a file from the network.
+     *
+     * On Android, the response body streams directly into the target file. If the download fails after
+     * it starts, a partially written file may remain at the destination. On iOS, the download first
+     * completes in a temporary location and the file is moved into place only after success, so no
+     * file is left behind when the request fails.
+     *
+     * @param url - The URL of the file to download.
+     * @param destination - The destination directory or file. If a directory is provided, the resulting filename will be determined based on the response headers.
+     * @param options - Download options. When the destination already contains a file, the promise rejects with a `DestinationAlreadyExists` error unless `options.idempotent` is set to `true`. With `idempotent: true`, the download overwrites the existing file instead of failing.
+     *
+     * @returns A promise that resolves to the downloaded file. When the server responds with
+     * a non-2xx HTTP status, the promise rejects with an `UnableToDownload` error whose
+     * message includes the status code. No file is created in that scenario.
+     *
+     * @example
+     * ```ts
+     * const file = await File.downloadFileAsync("https://example.com/image.png", new Directory(Paths.document));
+     * ```
+     */
+    static downloadFileAsync: (url: string, destination: Directory | File, options?: DownloadOptions) => Promise<File>;
+    /**
+     * Opens the system file picker for selecting a single file.
+     *
+     * This overload requires `options.multipleFiles` to be `undefined` or `false`.
+     *
