@@ -1,0 +1,12 @@
+    "name": "Aura Picsum Gallery",
+    "slug": "aura-picsum-gallery",
+    "android": {
+      "permissions": ["READ_MEDIA_IMAGES", "WRITE_EXTERNAL_STORAGE"],
+        "backgroundColor": "#8C5E3C"
+      "expo-image",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Aura Picsum Gallery needs photo access to save images to your gallery."
+        }
+      ],
