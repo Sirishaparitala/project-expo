@@ -1,0 +1,35 @@
+import ExpoFileSystem from './ExpoFileSystem';
+import { File } from './File';
+import type { WatchEvent, WatchOptions, WatchSubscription } from './FileSystemWatcher.types';
+/**
+ * Represents a directory on the filesystem.
+ *
+ * A `Directory` instance can be created for any path, and does not need to exist on the filesystem during creation.
+ *
+ * The constructor accepts an array of strings that are joined to create the directory URI. The first argument can also be a `Directory` instance (like `Paths.cache`).
+ * @example
+ * ```ts
+ * const directory = new Directory(Paths.cache, "subdirName");
+ * ```
+ */
+export declare class Directory extends ExpoFileSystem.FileSystemDirectory {
+    static pickDirectoryAsync: (initialUri?: string) => Promise<Directory>;
+    /**
+     * Creates an instance of a directory. It can be created for any path, and does not need to exist on the filesystem during creation.
+     *
+     * The constructor accepts an array of strings that are joined to create the directory URI. The first argument can also be a `Directory` instance (like `Paths.cache`).
+     * @param uris An array of: `file:///` string URIs, `File` instances, and `Directory` instances representing an arbitrary location on the file system.
+     * @example
+     * ```ts
+     * const directory = new Directory(Paths.cache, "subdirName");
+     * ```
+     */
+    constructor(...uris: (string | File | Directory)[]);
+    get parentDirectory(): Directory;
+    /**
+     * Lists the contents of a directory.
+     * Calling this method if the parent directory does not exist will throw an error.
+     * @returns An array of `Directory` and `File` instances.
+     */
+    list(): (Directory | File)[];
+    /**
